@@ -1,6 +1,7 @@
 # Paqueterías
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 # Valida que los datos de un dataframe sean de cierto tipo especificado
 def validate_dtypes(dtypes_series: pd.core.series.Series, dtype_dict: dict, date_columns: list = []) -> tuple[bool, str]:
@@ -224,3 +225,34 @@ def shipping_list_procesamiento(path):
   dtypes_validation = validate_dtypes(SL.dtypes, dtype_dict, dates)
   assert dtypes_validation[0], dtypes_validation[1]
   return SL
+
+def distinct_count(dataframe, column, count_name="HEAD COUNT"):
+  print(column,end="\n\n")
+  print( pd.DataFrame([dataframe[column].nunique()], columns=[count_name]) )
+
+def distinct_val_percentage(dataframe, column, decimals=0):
+  count_df = round(dataframe.rename(columns={column:f"{column}: porcentajes"})[f"{column}: porcentajes"].value_counts(1)*100, decimals)
+
+  print(count_df)
+
+  ax0 = count_df.plot.bar(rot=False)
+  
+  for p0 in ax0.patches:
+    ax0.annotate(str(round(p0.get_height(),2)), (p0.get_x() + p0.get_width() / 2., p0.get_height()), ha='center', va='bottom')
+
+  plt.show()
+
+def pivot_table(dataframe, rows, values, columns=None, margins=True, margins_name="Total", aggfunc="sum", rename_cols=None):
+  pivot_table = pd.pivot_table(
+      dataframe,
+      index=rows,
+      values=values,
+      columns=columns,
+      aggfunc=aggfunc,
+      margins=margins,
+      margins_name=margins_name
+  )
+
+  if rename_cols:
+    pivot_table = pivot_table.rename(columns=rename_cols)
+  print(pivot_table)

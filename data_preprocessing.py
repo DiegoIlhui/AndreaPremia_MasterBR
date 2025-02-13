@@ -255,4 +255,6 @@ def pivot_table(dataframe, rows, values, columns=None, margins=True, margins_nam
 
   if rename_cols:
     pivot_table = pivot_table.rename(columns=rename_cols)
-  print(pivot_table)
+      
+  with pd.option_context('display.max_rows', None, 'display.max_columns', None):
+    print(pivot_table) 

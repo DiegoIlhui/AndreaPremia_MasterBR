@@ -228,7 +228,9 @@ def shipping_list_procesamiento(path):
 
 def distinct_count(dataframe, column, count_name="HEAD COUNT"):
   print(column,end="\n\n")
-  print( pd.DataFrame([dataframe[column].nunique()], columns=[count_name]) )
+  distinct_count_df = pd.DataFrame([dataframe[column].nunique()], columns=[count_name])
+  print( distinct_count_df )
+  return distinct_count_df
 
 def distinct_val_percentage(dataframe, column, decimals=0):
   count_df = round(dataframe.rename(columns={column:f"{column}: porcentajes"})[f"{column}: porcentajes"].value_counts(1)*100, decimals)
@@ -241,6 +243,7 @@ def distinct_val_percentage(dataframe, column, decimals=0):
     ax0.annotate(str(round(p0.get_height(),2)), (p0.get_x() + p0.get_width() / 2., p0.get_height()), ha='center', va='bottom')
 
   plt.show()
+  return count_df
 
 def pivot_table(dataframe, rows, values, columns=None, margins=True, margins_name="Total", aggfunc="sum", rename_cols=None):
   pivot_table = pd.pivot_table(
@@ -258,3 +261,4 @@ def pivot_table(dataframe, rows, values, columns=None, margins=True, margins_nam
       
   with pd.option_context('display.max_rows', None, 'display.max_columns', None):
     print(pivot_table) 
+  return pivot_table

@@ -233,36 +233,74 @@ def distinct_count(dataframe, column, count_name="HEAD COUNT", return_=False):
   if return_:
     return distinct_count_df
 
-def distinct_val_percentage(dataframe, column, decimals=0, return_=False):
+def distinct_val_percentage(dataframe, column, decimals=0, print_count=True, return_=False, plot_percentages=False, plot_type=None):
   count_df = round(dataframe.rename(columns={column:f"{column}: porcentajes"})[f"{column}: porcentajes"].value_counts(1)*100, decimals)
 
-  print(count_df)
+  if print_count:
+    print(count_df)
+  else:
+    return_ = True
 
-  ax0 = count_df.plot.bar(rot=False)
-  
-  for p0 in ax0.patches:
-    ax0.annotate(str(round(p0.get_height(),2)), (p0.get_x() + p0.get_width() / 2., p0.get_height()), ha='center', va='bottom')
+  if plot_percentages:
+    if plot_type == None:
+      plot_type = "bar"
 
-  plt.show()
+    if plot_type == "bar":
+      ax0 = count_df.plot.bar(rot=False)
+      for p0 in ax0.patches:
+        ax0.annotate(str(round(p0.get_height(),2))+"%", (p0.get_x() + p0.get_width() / 2., p0.get_height()), ha='center', va='bottom')
+      plt.show()
+
+    elif plot_type == "pie":
+      wedges, texts, autotexts = plt.pie( x=count_df, shadow=False, autopct='%1.0f%%', pctdistance=1.1 )
+      plt.legend(wedges, count_df.index,
+                title="Porcentajes",
+                loc="center left",
+                bbox_to_anchor=(1, 0, 0.5, 1))
+      plt.show()
+    else:
+      print("Tipo de gráfico no reconocido o on disponible. Solo se acepta plot_type = 'bar' o 'pie'.")
+
   if return_:
     return count_df
 
-def pivot_table(dataframe, rows, values, columns=None, margins=True, margins_name="Total", aggfunc="sum", rename_cols=None, return_=False):
-  pivot_table = pd.pivot_table(
-      dataframe,
-      index=rows,
-      values=values,
-      columns=columns,
-      aggfunc=aggfunc,
-      margins=margins,
-      margins_name=margins_name
-  )
+def pivot_table(dataframe, rows, values=None, columns=None, margins=True, margins_name="Total", aggfunc="sum", rename_cols=None, return_=False):
+  if values is None:
+    if columns is None:
+      return dataframe[rows].describe()
+    else:
+      if (dataframe[columns].dtypes.name == "object") or (dataframe[columns].dtypes.name == "datetime64[ns]"):
+        dataframe_copy = dataframe[[rows,columns]].copy()
+        dataframe_copy["aux_column"] = range( dataframe_copy.shape[0] )
+        pivot_table = pd.pivot_table(
+            dataframe_copy,
+            index=rows,
+            values="aux_column",
+            columns=columns,
+            aggfunc="count",
+            margins=margins,
+            margins_name=margins_name
+        )
+        
+      else:
+        raise TypeError("Las columnas deben de contener solo valores categóricos, no numéricos.")
+
+  else:
+    pivot_table = pd.pivot_table(
+        dataframe,
+        index=rows,
+        values=values,
+        columns=columns,
+        aggfunc=aggfunc,
+        margins=margins,
+        margins_name=margins_name
+    )
 
   if rename_cols:
     pivot_table = pivot_table.rename(columns=rename_cols)
-      
+
   with pd.option_context('display.max_rows', None, 'display.max_columns', None):
-    print(pivot_table) 
+    print(pivot_table)
 
   if return_:
     return pivot_table

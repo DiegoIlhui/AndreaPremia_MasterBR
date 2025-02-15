@@ -227,7 +227,6 @@ def shipping_list_procesamiento(path):
   return SL
 
 def distinct_count(dataframe, column, count_name="HEAD COUNT", return_=False):
-  assert 
   print(column,end="\n\n")
   distinct_count_df = pd.DataFrame([dataframe[column].nunique()], columns=[count_name])
   print( distinct_count_df )

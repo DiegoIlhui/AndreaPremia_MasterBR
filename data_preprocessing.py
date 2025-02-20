@@ -33,6 +33,7 @@ def left_compare(left_df, left_val, right_df, right_val, indicator_name="_merge"
 # Procesamiento del reporte general de usuarios
 def reporte_general_de_usuarios_procesamiento(path):
   objects = [
+      "USER_ID",
       "ID_UNICO_ANDREA",
       "NOMBRE",
       "APELLIDO_PATERNO",
@@ -47,7 +48,6 @@ def reporte_general_de_usuarios_procesamiento(path):
   ]
 
   floats = [
-      "USER_ID",
       "NIVEL",
       "JOYAS_TOTALES_GANADAS",
       "JOYAS_CANJEADOS",

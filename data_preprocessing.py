@@ -214,7 +214,7 @@ def shipping_list_procesamiento(path):
 
   SL = pd.read_csv(
       path,
-      encoding="utf-8",
+      encoding="latin-1",
       dtype=dtype_dict,
       na_values=na_values_list,
   )

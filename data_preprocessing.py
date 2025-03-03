@@ -235,14 +235,14 @@ def procesar_shipping_list(path):
   assert dtypes_validation[0], dtypes_validation[1]
   return SL
 
-def distinct_count(dataframe, column, count_name="HEAD COUNT", return_=False):
+def conteo_distintivo(dataframe, column, count_name="HEAD COUNT", return_=False):
   print(column,end="\n\n")
   distinct_count_df = pd.DataFrame([dataframe[column].nunique()], columns=[count_name])
   print( distinct_count_df )
   if return_:
     return distinct_count_df
 
-def distinct_val_percentage(dataframe, column, decimals=0, print_count=True, return_=False, plot_percentages=False, plot_type=None):
+def porcentaje_valores_dist(dataframe, column, decimals=0, print_count=True, return_=False, plot_percentages=False, plot_type=None):
   count_df = round(dataframe.rename(columns={column:f"{column}: porcentajes"})[f"{column}: porcentajes"].value_counts(1)*100, decimals)
 
   if print_count:
@@ -273,11 +273,11 @@ def distinct_val_percentage(dataframe, column, decimals=0, print_count=True, ret
   if return_:
     return count_df
 
-def print_dataframe(dataframe):
+def mostrar_tabla(dataframe):
   with pd.option_context('display.max_rows', None, 'display.max_columns', None):
     print(dataframe)
 
-def pivot_table(dataframe, rows, values=None, columns=None, margins=True, margins_name="Total", aggfunc="sum", rename_cols=None, return_=False):
+def tabla_pivote(dataframe, rows, values=None, columns=None, margins=True, margins_name="Total", aggfunc="sum", rename_cols=None, return_=False):
   if values is None:
     if columns is None:
       return dataframe[rows].describe()

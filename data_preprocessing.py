@@ -302,7 +302,7 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
             if dataframe[column].dtypes.name == "object": aggfunc[column] = "count"
             else: aggfunc[column] = "sum"
 
-    pivot_table = pd.pivot_table(
+  pivot_table = pd.pivot_table(
         dataframe,
         index=filas,
         values=valores,

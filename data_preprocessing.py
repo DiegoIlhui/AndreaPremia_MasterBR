@@ -243,9 +243,6 @@ def conteo_distintivo(dataframe, column, count_name="HEAD COUNT"):
 def porcentaje_valores_dist(dataframe, column, decimals=0, plot_percentages=False, plot_type=None):
   count_df = round(dataframe.rename(columns={column:f"{column}: porcentajes"})[f"{column}: porcentajes"].value_counts(1)*100, decimals)
 
-  else:
-    return_ = True
-
   if plot_percentages:
     if plot_type == None:
       plot_type = "bar"

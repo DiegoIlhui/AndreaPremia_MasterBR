@@ -240,6 +240,8 @@ def procesar_datos(reporte_general_de_usuarios, reporte_de_metas_y_resultados, r
     RMR = procesar_reporte_metas_y_resultados(reporte_de_metas_y_resultados, reporte_general_de_usuarios)
     SL = procesar_shipping_list(reporte_SL)
 
+    print("Procesamiento de datos exitoso!")
+
     return RGU, RMR, SL
 
 def conteo_distintivo(dataframe, column, count_name="HEAD COUNT", return_=False):

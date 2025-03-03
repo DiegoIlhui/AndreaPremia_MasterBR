@@ -31,7 +31,7 @@ def left_compare(left_df, left_val, right_df, right_val, indicator_name="_merge"
   return merged
 
 # Procesamiento del reporte general de usuarios
-def reporte_general_de_usuarios_procesamiento(path):
+def procesar_reporte_general_de_usuarios(path):
   objects = [
       "USER_ID",
       "ID_UNICO_ANDREA",
@@ -107,7 +107,7 @@ def reporte_general_de_usuarios_procesamiento(path):
   return RGU
 
 # Procesamiento del reporte de metas y resultados
-def reporte_metas_y_resultados_procesamiento(path, reporte_general_de_usuarios):
+def procesar_reporte_metas_y_resultados(path, reporte_general_de_usuarios):
   objects = [
       "ID_UNICO_ANDREA",
       "NOMBRE",
@@ -148,7 +148,7 @@ def reporte_metas_y_resultados_procesamiento(path, reporte_general_de_usuarios):
   return pd.merge(RMR, left_compare(RMR, "ID_UNICO_ANDREA", reporte_general_de_usuarios, "ID_UNICO_ANDREA", indicator_name="Participa"), on="ID_UNICO_ANDREA")
 
 # Procesamiento de datos de Shipping List
-def shipping_list_procesamiento(path):
+def procesar_shipping_list(path):
   objects = [
       "ID_UNICO_CANJE",
       "PEDIDO EREWARD",

@@ -227,7 +227,8 @@ def procesar_shipping_list(path):
           na_values=na_values_list,
       )
 
-  SL[dates] = SL[dates].astype("datetime64[ns]")
+  
+  #SL[dates] = SL[dates].astype("datetime64[ns]")
   SL["PRECIO PRODUCTO"] = SL["PRECIO PRODUCTO"].apply(lambda x: x.replace("$", "")).astype("float64")
 
   dtypes_validation = validate_dtypes(SL.dtypes, dtype_dict, dates)

@@ -307,7 +307,7 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
         index=filas,
         values=valores,
         columns=columnas,
-        aggfunc=AggFunc,
+        aggfunc=aggfunc,
         margins=margins,
         margins_name=margins_name
     )

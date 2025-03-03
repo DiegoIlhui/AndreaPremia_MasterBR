@@ -278,7 +278,7 @@ def mostrar_tabla(dataframe):
     print(dataframe)
 
 def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, margins_name="Total", aggfunc="sum", rename_cols=None, return_=False):
-  if values is None:
+  if valores is None:
     if columns is None:
       return dataframe[rows].describe()
     else:
@@ -302,7 +302,7 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
     pivot_table = pd.pivot_table(
         dataframe,
         index=rows,
-        values=values,
+        values=valores,
         columns=columns,
         aggfunc=aggfunc,
         margins=margins,

@@ -312,7 +312,7 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
   if rename_cols:
     pivot_table = pivot_table.rename(columns=rename_cols)
 
-  print_dataframe(pivot_table)
+  mostrar_tabla(pivot_table)
 
   if return_:
     return pivot_table

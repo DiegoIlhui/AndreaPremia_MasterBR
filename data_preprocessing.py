@@ -279,17 +279,17 @@ def mostrar_tabla(dataframe):
 
 def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, margins_name="Total", aggfunc="sum", rename_cols=None, return_=False):
   if valores is None:
-    if columns is None:
+    if columnas is None:
       return dataframe[rows].describe()
     else:
-      if (dataframe[columns].dtypes.name == "object") or (dataframe[columns].dtypes.name == "datetime64[ns]"):
-        dataframe_copy = dataframe[[rows,columns]].copy()
+      if (dataframe[columnas].dtypes.name == "object") or (dataframe[columnas].dtypes.name == "datetime64[ns]"):
+        dataframe_copy = dataframe[[rows,columnas]].copy()
         dataframe_copy["aux_column"] = range( dataframe_copy.shape[0] )
         pivot_table = pd.pivot_table(
             dataframe_copy,
             index=filas,
             values="aux_column",
-            columns=columns,
+            columns=columnas,
             aggfunc="count",
             margins=margins,
             margins_name=margins_name
@@ -303,7 +303,7 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
         dataframe,
         index=filas,
         values=valores,
-        columns=columns,
+        columns=columnas,
         aggfunc=aggfunc,
         margins=margins,
         margins_name=margins_name

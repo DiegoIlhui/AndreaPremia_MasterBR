@@ -235,15 +235,6 @@ def procesar_shipping_list(path):
   assert dtypes_validation[0], dtypes_validation[1]
   return SL
 
-def procesar_datos(reporte_general_de_usuarios, reporte_de_metas_y_resultados, reporte_SL):
-    RGU = procesar_reporte_general_de_usuarios(reporte_general_de_usuarios)
-    RMR = procesar_reporte_metas_y_resultados(reporte_de_metas_y_resultados, RGU)
-    SL = procesar_shipping_list(reporte_SL)
-
-    print("Procesamiento de datos exitoso!")
-
-    return RGU, RMR, SL
-
 def conteo_distintivo(dataframe, column, count_name="HEAD COUNT", return_=False):
   print(column,end="\n\n")
   distinct_count_df = pd.DataFrame([dataframe[column].nunique()], columns=[count_name])
@@ -384,3 +375,17 @@ def filtrar_O(dataframe, *condiciones):
 
 def filtrar_cruzado(dataframe_1, column_1, dataframe_2, column_2):
   return dataframe_1[dataframe_1[column_1].isin( dataframe_2[column_2] )]
+
+def procesar_datos(reporte_general_de_usuarios, reporte_de_metas_y_resultados, reporte_SL, filtrar_default=True):
+    RGU = procesar_reporte_general_de_usuarios(reporte_general_de_usuarios)
+    RMR = procesar_reporte_metas_y_resultados(reporte_de_metas_y_resultados, RGU)
+    SL = procesar_shipping_list(reporte_SL)
+
+    print("Procesamiento de datos exitoso!")
+
+    if filtrar_default:
+        RGU = filtrar_O(RGU, ("PERFIL","==","Estrella"), ("PERFIL","==","Mayorista"))
+        RMR = filtrar_O(RMR, ("PERFIL","==","Estrella"), ("PERFIL","==","Mayorista"))
+        SL = filtrar_cruzado(SL, "ID_UNICO_ANDREA", RGU, "ID_UNICO_ANDREA")
+
+    return RGU, RMR, SL

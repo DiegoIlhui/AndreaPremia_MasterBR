@@ -212,12 +212,20 @@ def procesar_shipping_list(path):
 
   dtype_dict = {column:np.object_ for column in objects} | {column:np.float64 for column in floats}
 
-  SL = pd.read_csv(
-      path,
-      encoding="latin-1",
-      dtype=dtype_dict,
-      na_values=na_values_list,
-  )
+  try:  
+      SL = pd.read_csv(
+          path,
+          encoding="latin-1",
+          dtype=dtype_dict,
+          na_values=na_values_list,
+      )
+  except:
+      SL = pd.read_csv(
+          path,
+          encoding="utf-8",
+          dtype=dtype_dict,
+          na_values=na_values_list,
+      )
 
   SL[dates] = SL[dates].astype("datetime64[ns]")
   SL["PRECIO PRODUCTO"] = SL["PRECIO PRODUCTO"].apply(lambda x: x.replace("$", "")).astype("float64")

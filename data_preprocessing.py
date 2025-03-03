@@ -240,7 +240,7 @@ def conteo_distintivo(dataframe, column, count_name="HEAD COUNT"):
   distinct_count_df = pd.DataFrame([dataframe[column].nunique()], columns=[count_name])
   return distinct_count_df
 
-def porcentaje_valores_dist(dataframe, column, decimals=0, plot_percentages=False, plot_type=None):
+def porcentaje_valores_dist(dataframe, column, decimals=2, plot_percentages=False, plot_type=None):
   count_df = round(dataframe[column].value_counts(1)*100, decimals)
 
   if plot_percentages:
@@ -289,6 +289,16 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
         
       else:
         raise TypeError("Las columnas deben de contener solo valores categóricos, no numéricos.")
+  elif dataframe[valoers].dtypes.name == "object":
+      pivot_table = pd.pivot_table(
+            dataframe_copy,
+            index=filas,
+            values=valores,
+            columns=columnas,
+            aggfunc="count",
+            margins=margins,
+            margins_name=margins_name
+        )
 
   else:
     pivot_table = pd.pivot_table(

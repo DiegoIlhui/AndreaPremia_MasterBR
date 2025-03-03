@@ -269,7 +269,7 @@ def mostrar_tabla(dataframe):
   with pd.option_context('display.max_rows', None, 'display.max_columns', None):
     print(dataframe)
 
-def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, margins_name="Total", aggfunc="sum", rename_cols=None, return_=False):
+def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, margins_name="Total", aggfunc=None, rename_cols=None, return_=False):
   if valores is None:
     if columnas is None:
       return dataframe[rows].describe()
@@ -286,27 +286,28 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
             margins=margins,
             margins_name=margins_name
         )
+        return pivot_table
         
       else:
         raise TypeError("Las columnas deben de contener solo valores categóricos, no numéricos.")
-  elif dataframe[valores].dtypes.name == "object":
-      pivot_table = pd.pivot_table(
-            dataframe,
-            index=filas,
-            values=valores,
-            columns=columnas,
-            aggfunc="count",
-            margins=margins,
-            margins_name=margins_name
-        )
 
-  else:
+  if not aggfunc:
+      if dataframe[valores].dtypes.name == "object":
+          aggfunc = "count"
+      elif (dataframe[valores].dtypes.name == "float64") or (dataframe[valores].dtypes.name == "int64"):
+          aggfunc = "sum"
+      elif isinstance(columnas, list):
+        aggfunc = {}
+        for column in columnas:
+            if dataframe[column].dtypes.name == "object": aggfunc[column] = "count"
+            else: aggfunc[column] = "sum"
+
     pivot_table = pd.pivot_table(
         dataframe,
         index=filas,
         values=valores,
         columns=columnas,
-        aggfunc=aggfunc,
+        aggfunc=AggFunc,
         margins=margins,
         margins_name=margins_name
     )
@@ -383,7 +384,7 @@ def procesar_datos(reporte_general_de_usuarios, reporte_de_metas_y_resultados, r
     RMR = procesar_reporte_metas_y_resultados(reporte_de_metas_y_resultados, RGU)
     SL = procesar_shipping_list(reporte_SL)
 
-    print("Procesamiento de datos exitoso!")
+    print("\n¡PROCESAMIENTO DE DATOS EXITOSO!")
 
     if filtrar_default:
         RGU = filtrar_O(RGU, ("PERFIL","==","Estrella"), ("PERFIL","==","Mayorista"))

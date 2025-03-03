@@ -287,7 +287,7 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
         dataframe_copy["aux_column"] = range( dataframe_copy.shape[0] )
         pivot_table = pd.pivot_table(
             dataframe_copy,
-            index=rows,
+            index=filas,
             values="aux_column",
             columns=columns,
             aggfunc="count",
@@ -301,7 +301,7 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
   else:
     pivot_table = pd.pivot_table(
         dataframe,
-        index=rows,
+        index=filas,
         values=valores,
         columns=columns,
         aggfunc=aggfunc,

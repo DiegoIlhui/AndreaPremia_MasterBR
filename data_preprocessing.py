@@ -235,18 +235,14 @@ def procesar_shipping_list(path):
   assert dtypes_validation[0], dtypes_validation[1]
   return SL
 
-def conteo_distintivo(dataframe, column, count_name="HEAD COUNT", return_=False):
+def conteo_distintivo(dataframe, column, count_name="HEAD COUNT"):
   print(column,end="\n\n")
   distinct_count_df = pd.DataFrame([dataframe[column].nunique()], columns=[count_name])
-  print( distinct_count_df )
-  if return_:
-    return distinct_count_df
+  return distinct_count_df
 
-def porcentaje_valores_dist(dataframe, column, decimals=0, print_count=True, return_=False, plot_percentages=False, plot_type=None):
+def porcentaje_valores_dist(dataframe, column, decimals=0, plot_percentages=False, plot_type=None):
   count_df = round(dataframe.rename(columns={column:f"{column}: porcentajes"})[f"{column}: porcentajes"].value_counts(1)*100, decimals)
 
-  if print_count:
-    print(count_df)
   else:
     return_ = True
 
@@ -270,8 +266,7 @@ def porcentaje_valores_dist(dataframe, column, decimals=0, print_count=True, ret
     else:
       print("Tipo de gráfico no reconocido o on disponible. Solo se acepta plot_type = 'bar' o 'pie'.")
 
-  if return_:
-    return count_df
+  return count_df
 
 def mostrar_tabla(dataframe):
   with pd.option_context('display.max_rows', None, 'display.max_columns', None):
@@ -312,10 +307,9 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
   if rename_cols:
     pivot_table = pivot_table.rename(columns=rename_cols)
 
-  mostrar_tabla(pivot_table)
+  #mostrar_tabla(pivot_table)
 
-  if return_:
-    return pivot_table
+  return pivot_table
 
 def filtrar_Y(dataframe, *condiciones):
   filtered_dataframe = dataframe
@@ -375,6 +369,9 @@ def filtrar_O(dataframe, *condiciones):
 
 def filtrar_cruzado(dataframe_1, column_1, dataframe_2, column_2):
   return dataframe_1[dataframe_1[column_1].isin( dataframe_2[column_2] )]
+
+def suma(dataframe, *columnas):
+  return pd.DataFrame({f"suma total de {columna}":[dataframe[columna].sum()] for columna in columnas})
 
 def procesar_datos(reporte_general_de_usuarios, reporte_de_metas_y_resultados, reporte_SL, filtrar_default=True):
     RGU = procesar_reporte_general_de_usuarios(reporte_general_de_usuarios)

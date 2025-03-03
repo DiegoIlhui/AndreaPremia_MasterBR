@@ -277,7 +277,7 @@ def mostrar_tabla(dataframe):
   with pd.option_context('display.max_rows', None, 'display.max_columns', None):
     print(dataframe)
 
-def tabla_pivote(dataframe, rows, values=None, columns=None, margins=True, margins_name="Total", aggfunc="sum", rename_cols=None, return_=False):
+def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, margins_name="Total", aggfunc="sum", rename_cols=None, return_=False):
   if values is None:
     if columns is None:
       return dataframe[rows].describe()

@@ -381,3 +381,6 @@ def filtrar_O(dataframe, *condiciones):
       print(f'La segunda entrada de la condición {condicion} debe de ser: "=="(igual), ">>"(mayor), ">="(mayor o igual), "<<"(menor), "<="(menor o igual) o "<>"(diferente).')
 
   return filtered_dataframe[FILTER]
+
+def filtrar_cruzado(dataframe_1, column_1, dataframe_2, column_2):
+  return dataframe_1[dataframe_1[column_1].isin( dataframe_2[column_2] )]

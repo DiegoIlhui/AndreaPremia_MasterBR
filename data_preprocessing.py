@@ -241,7 +241,7 @@ def conteo_distintivo(dataframe, column, count_name="HEAD COUNT"):
   return distinct_count_df
 
 def porcentaje_valores_dist(dataframe, column, decimals=0, plot_percentages=False, plot_type=None):
-  count_df = round(dataframe.rename(columns={column:f"{column}: porcentajes"})[f"{column}: porcentajes"].value_counts(1)*100, decimals)
+  count_df = round(dataframe[column].value_counts(1)*100, decimals)
 
   if plot_percentages:
     if plot_type == None:
@@ -263,7 +263,7 @@ def porcentaje_valores_dist(dataframe, column, decimals=0, plot_percentages=Fals
     else:
       print("Tipo de gráfico no reconocido o on disponible. Solo se acepta plot_type = 'bar' o 'pie'.")
 
-  return count_df
+  return count_df.rename("Porcentaje %")
 
 def mostrar_tabla(dataframe):
   with pd.option_context('display.max_rows', None, 'display.max_columns', None):

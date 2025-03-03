@@ -289,7 +289,7 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
         
       else:
         raise TypeError("Las columnas deben de contener solo valores categóricos, no numéricos.")
-  elif dataframe[valoers].dtypes.name == "object":
+  elif dataframe[valores].dtypes.name == "object":
       pivot_table = pd.pivot_table(
             dataframe_copy,
             index=filas,

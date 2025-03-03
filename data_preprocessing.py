@@ -237,7 +237,7 @@ def procesar_shipping_list(path):
 
 def procesar_datos(reporte_general_de_usuarios, reporte_de_metas_y_resultados, reporte_SL):
     RGU = procesar_reporte_general_de_usuarios(reporte_general_de_usuarios)
-    RMR = procesar_reporte_metas_y_resultados(reporte_de_metas_y_resultados, reporte_general_de_usuarios)
+    RMR = procesar_reporte_metas_y_resultados(reporte_de_metas_y_resultados, RGU)
     SL = procesar_shipping_list(reporte_SL)
 
     print("Procesamiento de datos exitoso!")

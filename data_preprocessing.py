@@ -325,3 +325,59 @@ def tabla_pivote(dataframe, rows, values=None, columns=None, margins=True, margi
 
   if return_:
     return pivot_table
+
+def filtrar_Y(dataframe, *condiciones):
+  filtered_dataframe = dataframe
+  FILTER = [True] * dataframe.shape[0]
+  for condicion in condiciones:
+    assert isinstance(condicion, tuple) & len(condicion)==3, 'Las condiciones deben de estar escritas de la forma:\n(columna, condicion, valor)"'
+    column, cond, val = condicion
+    if cond == "==":
+      FILTER &= ( filtered_dataframe[column]==val ).values
+
+    elif cond == ">>":
+      FILTER &= ( filtered_dataframe[column]>val ).values
+
+    elif cond == ">=":
+      FILTER &= ( filtered_dataframe[column]>=val ).values
+
+    elif cond == "<<":
+      FILTER &= ( filtered_dataframe[column]<val ).values
+
+    elif cond == "<=":
+      FILTER &= ( filtered_dataframe[column]<=val ).values
+
+    elif cond == "<>":
+      FILTER &= ( filtered_dataframe[column]!=val ).values
+    else:
+      print(f'La segunda entrada de la condición {condicion} debe de ser: "=="(igual), ">>"(mayor), ">="(mayor o igual), "<<"(menor), "<="(menor o igual) o "<>"(diferente).')
+
+  return filtered_dataframe[FILTER]
+
+def filtrar_O(dataframe, *condiciones):
+  filtered_dataframe = dataframe
+  FILTER = [False] * dataframe.shape[0]
+  for condicion in condiciones:
+    assert isinstance(condicion, tuple) and len(condicion)==3, 'Las condiciones deben de estar escritas de la forma:\n(columna, condicion, valor)"'
+    column, cond, val = condicion
+    if cond == "==":
+      FILTER |= ( filtered_dataframe[column]==val ).values
+
+    elif cond == ">>":
+      FILTER |= ( filtered_dataframe[column]>val ).values
+
+    elif cond == ">=":
+      FILTER |= ( filtered_dataframe[column]>=val ).values
+
+    elif cond == "<<":
+      FILTER |= ( filtered_dataframe[column]<val ).values
+
+    elif cond == "<=":
+      FILTER |= ( filtered_dataframe[column]<=val ).values
+
+    elif cond == "<>":
+      FILTER |= ( filtered_dataframe[column]!=val ).values
+    else:
+      print(f'La segunda entrada de la condición {condicion} debe de ser: "=="(igual), ">>"(mayor), ">="(mayor o igual), "<<"(menor), "<="(menor o igual) o "<>"(diferente).')
+
+  return filtered_dataframe[FILTER]

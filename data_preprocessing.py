@@ -314,15 +314,13 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
   if rename_cols:
     pivot_table = pivot_table.rename(columns=rename_cols)
 
-  #mostrar_tabla(pivot_table)
-
   return pivot_table
 
 def filtrar_Y(dataframe, *condiciones):
   filtered_dataframe = dataframe
   FILTER = [True] * dataframe.shape[0]
   for condicion in condiciones:
-    assert isinstance(condicion, tuple) & len(condicion)==3, 'Las condiciones deben de estar escritas de la forma:\n(columna, condicion, valor)"'
+    assert isinstance(condicion, tuple) and len(condicion)==3, 'Las condiciones deben de estar escritas de la forma:\n(columna, condicion, valor)'
     column, cond, val = condicion
     if cond == "==":
       FILTER &= ( filtered_dataframe[column]==val ).values

@@ -235,6 +235,13 @@ def procesar_shipping_list(path):
   assert dtypes_validation[0], dtypes_validation[1]
   return SL
 
+def procesar_datos(reporte_general_de_usuarios, reporte_de_metas_y_resultados, reporte_SL):
+    RGU = procesar_reporte_general_de_usuarios(reporte_general_de_usuarios)
+    RMR = procesar_reporte_metas_y_resultados(reporte_de_metas_y_resultados, reporte_general_de_usuarios)
+    SL = procesar_shipping_list(reporte_SL)
+
+    return RGU, RMR, SL
+
 def conteo_distintivo(dataframe, column, count_name="HEAD COUNT", return_=False):
   print(column,end="\n\n")
   distinct_count_df = pd.DataFrame([dataframe[column].nunique()], columns=[count_name])

@@ -272,10 +272,10 @@ def mostrar_tabla(dataframe):
 def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, margins_name="Total", aggfunc=None, rename_cols=None, return_=False):
   if valores is None:
     if columnas is None:
-      return dataframe[rows].describe()
+      return dataframe[valores].describe()
     else:
       if (dataframe[columnas].dtypes.name == "object") or (dataframe[columnas].dtypes.name == "datetime64[ns]"):
-        dataframe_copy = dataframe[[rows,columnas]].copy()
+        dataframe_copy = dataframe[[valores,columnas]].copy()
         dataframe_copy["aux_column"] = range( dataframe_copy.shape[0] )
         pivot_table = pd.pivot_table(
             dataframe_copy,
@@ -296,9 +296,9 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
           aggfunc = "count"
       elif (dataframe[valores].dtypes.name == "float64") or (dataframe[valores].dtypes.name == "int64"):
           aggfunc = "sum"
-      elif isinstance(columnas, list):
+      elif isinstance(valores, list):
         aggfunc = {}
-        for column in columnas:
+        for column in valores:
             if dataframe[column].dtypes.name == "object": aggfunc[column] = "count"
             else: aggfunc[column] = "sum"
 

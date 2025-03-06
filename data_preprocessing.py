@@ -332,7 +332,7 @@ def filtrar_Y(dataframe, *condiciones, guardar_como=None):
   filtered_dataframe = dataframe
   FILTER = [True] * dataframe.shape[0]
   for condicion in condiciones:
-    assert isinstance(condicion, tuple) and len(condicion)==3, 'Las condiciones deben de estar escritas de la forma:\n(columna, condicion, valor)'
+    assert isinstance(condicion, tuple), 'Las condiciones deben de estar escritas de la forma:\n(columna, condicion, valor)'
     column, cond, val = condicion
     if cond == "==":
       FILTER &= ( filtered_dataframe[column]==val ).values

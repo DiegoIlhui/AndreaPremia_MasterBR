@@ -335,16 +335,16 @@ def filtrar_Y(dataframe, *condiciones, guardar_como=None):
     assert isinstance(condicion, tuple), 'Las condiciones deben de estar escritas de la forma:\n(columna, condicion, valor)'
     if len(condicion) == 3:
         column, cond, val = condicion
-        if cond == "==":
+        if cond == "=":
           FILTER &= ( filtered_dataframe[column]==val ).values
     
-        elif cond == ">>":
+        elif cond == ">":
           FILTER &= ( filtered_dataframe[column]>val ).values
     
         elif cond == ">=":
           FILTER &= ( filtered_dataframe[column]>=val ).values
     
-        elif cond == "<<":
+        elif cond == "<":
           FILTER &= ( filtered_dataframe[column]<val ).values
     
         elif cond == "<=":
@@ -357,7 +357,7 @@ def filtrar_Y(dataframe, *condiciones, guardar_como=None):
     elif len(condicion)==2 and condicion[1] == "notnull":
       FILTER &= ( pd.notnull(filtered_dataframe[condicion[0]]) ).values
     else:
-      print(f'La segunda entrada de la condición {condicion} debe de ser: "=="(igual), ">>"(mayor), ">="(mayor o igual), "<<"(menor), "<="(menor o igual) o "<>"(diferente).')
+      print(f'La segunda entrada de la condición {condicion} debe de ser: "="(igual), ">"(mayor), ">="(mayor o igual), "<"(menor), "<="(menor o igual) o "<>"(diferente).')
 
   if guardar_como is not None: filtered_dataframe[FILTER].to_csv(guardar_como, encoding="latin-1", index=False)
   return filtered_dataframe[FILTER]
@@ -369,16 +369,16 @@ def filtrar_O(dataframe, *condiciones, guardar_como=None):
     assert isinstance(condicion, tuple), 'Las condiciones deben de estar escritas de la forma:\n(columna, condicion, valor) o (columna, "notnull")'
     if len(condicion) == 3:
         column, cond, val = condicion
-        if cond == "==":
+        if cond == "=":
           FILTER |= ( filtered_dataframe[column]==val ).values
     
-        elif cond == ">>":
+        elif cond == ">":
           FILTER |= ( filtered_dataframe[column]>val ).values
     
         elif cond == ">=":
           FILTER |= ( filtered_dataframe[column]>=val ).values
     
-        elif cond == "<<":
+        elif cond == "<":
           FILTER |= ( filtered_dataframe[column]<val ).values
     
         elif cond == "<=":
@@ -391,7 +391,7 @@ def filtrar_O(dataframe, *condiciones, guardar_como=None):
     elif len(condicion) == 2 and condicion[1] == "notnull":
       FILTER |= ( pd.notnull(filtered_dataframe[ condicion[0] ]) ).values
     else:
-      print(f'La segunda entrada de la condición {condicion} debe de ser: "=="(igual), ">>"(mayor), ">="(mayor o igual), "<<"(menor), "<="(menor o igual), "<>"(diferente) o "notnull".')
+      print(f'La segunda entrada de la condición {condicion} debe de ser: "="(igual), ">"(mayor), ">="(mayor o igual), "<"(menor), "<="(menor o igual), "<>"(diferente) o "notnull".')
 
   if guardar_como is not None: filtered_dataframe[FILTER].to_csv(guardar_como, encoding="latin-1", index=False)
   return filtered_dataframe[FILTER]
@@ -415,8 +415,8 @@ def procesar_datos(reporte_general_de_usuarios, reporte_de_metas_y_resultados, r
     print("\n¡PROCESAMIENTO DE DATOS EXITOSO!")
 
     if filtrar_default:
-        RGU = filtrar_O(RGU, ("PERFIL","==","Estrella"), ("PERFIL","==","Mayorista"))
-        RMR = filtrar_O(RMR, ("PERFIL","==","Estrella"), ("PERFIL","==","Mayorista"))
+        RGU = filtrar_O(RGU, ("PERFIL","=","Estrella"), ("PERFIL","=","Mayorista"))
+        RMR = filtrar_O(RMR, ("PERFIL","=","Estrella"), ("PERFIL","=","Mayorista"))
         SL = filtrar_cruzado(SL, "ID_UNICO_ANDREA", RGU, "ID_UNICO_ANDREA")
 
     if guardar:

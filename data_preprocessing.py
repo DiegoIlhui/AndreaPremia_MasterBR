@@ -235,7 +235,7 @@ def procesar_shipping_list(path):
   assert dtypes_validation[0], dtypes_validation[1]
   return SL
 
-def conteo_distintivo(dataframe, column, count_name="HEAD COUNT",guardar_como=None):
+def conteo_distintivo(dataframe, column, count_name="COUNT",guardar_como=None):
   print(column,end="\n\n")
   distinct_count_df = pd.DataFrame([dataframe[column].nunique()], columns=[count_name])
   if guardar_como is not None:
@@ -267,7 +267,7 @@ def porcentaje_valores_dist(dataframe, column, decimals=2, plot_percentages=Fals
 
   count_df = count_df.rename("Porcentaje %")
   if guardar_como is not None:
-      count_df.to_csv(guardar_como, encoding="latin-1", index=False)
+      count_df.to_csv(guardar_como, encoding="latin-1", index=True)
   return count_df
 
 def mostrar_tabla(dataframe):
@@ -278,7 +278,7 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
   if valores is None:
     if columnas is None:
       frame_to_return = dataframe[valores].describe()
-      if guardar_como is not None: frame_to_return.to_csv(guardar_como, encoding="latin-1", index=False)
+      if guardar_como is not None: frame_to_return.to_csv(guardar_como, encoding="latin-1", index=True)
       return frame_to_return
     else:
       if (dataframe[columnas].dtypes.name == "object") or (dataframe[columnas].dtypes.name == "datetime64[ns]"):
@@ -294,7 +294,7 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
             margins_name=margins_name
         )
         if guardar_como is not None:
-            pivot_table.to_csv(guardar_como, encoding="latin-1", index=False)
+            pivot_table.to_csv(guardar_como, encoding="latin-1", index=True)
         return pivot_table
         
       else:
@@ -325,7 +325,7 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
     pivot_table = pivot_table.rename(columns=rename_cols)
 
   if guardar_como is not None:
-      pivot_table.to_csv(guardar_como, encoding="latin-1", index=False)
+      pivot_table.to_csv(guardar_como, encoding="latin-1", index=True)
   return pivot_table
 
 def filtrar_Y(dataframe, *condiciones, guardar_como=None):
@@ -399,7 +399,7 @@ def filtrar_O(dataframe, *condiciones, guardar_como=None):
 def filtrar_cruzado(dataframe_1, column_1, dataframe_2, column_2=None, guardar_como=None):
   if column_2 is None: column_2 = column_1
   dataframe_to_return = dataframe_1[dataframe_1[column_1].isin( dataframe_2[column_2] )]
-  if guardar_como is not None: dataframe_to_return.to_csv( guardar_como, encoding="latin-1", index=False )
+  if guardar_como is not None: dataframe_to_return.to_csv( guardar_como, encoding="latin-1", index=True )
   return dataframe_to_return
 
 def suma(dataframe, *columnas, guardar_como=None):

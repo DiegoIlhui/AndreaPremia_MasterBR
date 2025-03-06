@@ -362,6 +362,7 @@ def filtrar_Y(dataframe, *condiciones, guardar_como=None):
           FILTER &= ( filtered_dataframe[column]!=val ).values
         else:
             print(f"No se reconoce la condición {cond}.")
+            print(f'La segunda entrada de la condición {condicion} debe de ser: "="(igual), ">"(mayor), ">="(mayor o igual), "<"(menor), "<="(menor o igual), "<>"(diferente) o "notnull".')
     elif len(condicion)==2 and condicion[1] == "notnull":
       FILTER &= ( pd.notnull(filtered_dataframe[condicion[0]]) ).values
     else:
@@ -395,7 +396,8 @@ def filtrar_O(dataframe, *condiciones, guardar_como=None):
         elif cond == "<>":
           FILTER |= ( filtered_dataframe[column]!=val ).values
         else:
-            print(f"No se reconoce la condición {cond}")
+            print(f"No se reconoce la condición {cond}.")
+            print(f'La segunda entrada de la condición {condicion} debe de ser: "="(igual), ">"(mayor), ">="(mayor o igual), "<"(menor), "<="(menor o igual), "<>"(diferente) o "notnull".')
     elif len(condicion) == 2 and condicion[1] == "notnull":
       FILTER |= ( pd.notnull(filtered_dataframe[ condicion[0] ]) ).values
     else:

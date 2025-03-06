@@ -417,8 +417,10 @@ def suma(dataframe, *columnas, guardar_como=None):
 
 def procesar_datos(reporte_general_de_usuarios, reporte_de_metas_y_resultados, reporte_SL, filtrar_default=True, guardar=False):
     RGU = procesar_reporte_general_de_usuarios(reporte_general_de_usuarios)
-    RMR = procesar_reporte_metas_y_resultados(reporte_de_metas_y_resultados, RGU)
-    SL = procesar_shipping_list(reporte_SL)
+    RMR = procesar_reporte_metas_y_resultados(reporte_de_metas_y_resultados, RGU).fillna(0)
+    RGU = RGU.fillna(0)
+    SL = procesar_shipping_list(reporte_SL).fillna(0)
+    
 
     print("\n¡PROCESAMIENTO DE DATOS EXITOSO!")
 

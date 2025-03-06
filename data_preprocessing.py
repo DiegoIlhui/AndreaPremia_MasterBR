@@ -386,7 +386,8 @@ def filtrar_O(dataframe, *condiciones, guardar_como=None):
   if guardar_como is not None: filtered_dataframe[FILTER].to_csv(guardar_como, encoding="latin-1", index=False)
   return filtered_dataframe[FILTER]
 
-def filtrar_cruzado(dataframe_1, column_1, dataframe_2, column_2, guardar_como=None):
+def filtrar_cruzado(dataframe_1, column_1, dataframe_2, column_2=None, guardar_como=None):
+  if column_2 is None: column_2 = column_1
   dataframe_to_return = dataframe_1[dataframe_1[column_1].isin( dataframe_2[column_2] )]
   if guardar_como is not None: dataframe_to_return.to_csv( guardar_como, encoding="latin-1", index=False )
   return dataframe_to_return

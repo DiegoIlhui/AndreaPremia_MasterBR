@@ -316,8 +316,8 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
   elif isinstance(aggfunc,dict):
       for valor in valores:
           if valor not in aggfunc.keys():
-              if (dataframe[column].dtypes.name == "object") or (dataframe[column].dtypes.name == "datetime64[ns]"): aggfunc[column] = "nunique"
-              else: aggfunc[column] = "sum"
+              if (dataframe[valor].dtypes.name == "object") or (dataframe[valor].dtypes.name == "datetime64[ns]"): aggfunc[valor] = "nunique"
+              else: aggfunc[valor] = "sum"
 
   pivot_table = pd.pivot_table(
         dataframe,

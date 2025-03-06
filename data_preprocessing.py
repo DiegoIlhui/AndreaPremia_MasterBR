@@ -235,9 +235,11 @@ def procesar_shipping_list(path):
   assert dtypes_validation[0], dtypes_validation[1]
   return SL
 
-def conteo_distintivo(dataframe, column, count_name="HEAD COUNT"):
+def conteo_distintivo(dataframe, column, count_name="HEAD COUNT",guardar_como=None):
   print(column,end="\n\n")
   distinct_count_df = pd.DataFrame([dataframe[column].nunique()], columns=[count_name])
+  if guardar_como is not None:
+    distinct_count_df.to_csv(guardar_como, encoding="latin-1")
   return distinct_count_df
 
 def porcentaje_valores_dist(dataframe, column, decimals=2, plot_percentages=False, plot_type=None):

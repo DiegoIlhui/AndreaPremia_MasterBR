@@ -83,7 +83,9 @@ def procesar_reporte_general_de_usuarios(path):
 
   RGU["Ganadoras"] = RGU["JOYAS_TOTALES_GANADAS"].apply(lambda x: "No ganadora" if x==0 else "Ganadora")
   RGU["Con canje"] = RGU["JOYAS_CANJEADOS"].apply(lambda x: "Sin canje" if x==0 else "Con canje")
-  RGU["Con ingreso"] = RGU["ULTIMO_INGRESO_APP"].apply(lambda x: "Sin ingreso" if x==0 else "Con ingreso")
+  RGU["Con ingreso"] = [np.null] * RGU.shape[0]
+  RGU.loc[pd.isnull(RGU["ULTIMO_INGRESO_APP"]), "Con ingreso"] = "Con ingreso"
+  RGU.loc[pd.isnull(RGU["ULTIMO_INGRESO_APP"]), "Con ingreso"] = "Sin ingreso"
 
   generaciones_bins_dates = [
       "1/1/1900",
@@ -289,7 +291,7 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
             index=filas,
             values="aux_column",
             columns=columnas,
-            aggfunc=pd.Series.nunique,
+            aggfunc="nunique",
             margins=margins,
             margins_name=margins_name
         )
@@ -302,14 +304,20 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
 
   if not aggfunc:
       if dataframe[valores].dtypes.name == "object":
-          aggfunc = pd.Series.nunique
+          aggfunc = "nunique"
       elif (dataframe[valores].dtypes.name == "float64") or (dataframe[valores].dtypes.name == "int64"):
           aggfunc = "sum"
       elif isinstance(valores, list):
         aggfunc = {}
         for column in valores:
-            if (dataframe[column].dtypes.name == "object") or (dataframe[column].dtypes.name == "datetime64[ns]"): aggfunc[column] = pd.Series.nunique
+            if (dataframe[column].dtypes.name == "object") or (dataframe[column].dtypes.name == "datetime64[ns]"): aggfunc[column] = "nunique"
             else: aggfunc[column] = "sum"
+                
+  elif isinstance(aggfunc,dict):
+      for valor in valores:
+          if valor not in aggfunc.keys():
+              if (dataframe[column].dtypes.name == "object") or (dataframe[column].dtypes.name == "datetime64[ns]"): aggfunc[column] = "nunique"
+              else: aggfunc[column] = "sum"
 
   pivot_table = pd.pivot_table(
         dataframe,

@@ -357,7 +357,7 @@ def filtrar_Y(dataframe, *condiciones, guardar_como=None):
   if guardar_como is not None: filtered_dataframe[FILTER].to_csv(guardar_como, encoding="latin-1", index=False)
   return filtered_dataframe[FILTER]
 
-def filtrar_O(dataframe, *condiciones):
+def filtrar_O(dataframe, *condiciones, guardar_como=None):
   filtered_dataframe = dataframe
   FILTER = [False] * dataframe.shape[0]
   for condicion in condiciones:
@@ -383,7 +383,7 @@ def filtrar_O(dataframe, *condiciones):
     else:
       print(f'La segunda entrada de la condición {condicion} debe de ser: "=="(igual), ">>"(mayor), ">="(mayor o igual), "<<"(menor), "<="(menor o igual) o "<>"(diferente).')
 
-  filtered_dataframe[FILTER].to_csv(guardar_como, encoding="latin-1", index=False)
+  if guardar_como is not None: filtered_dataframe[FILTER].to_csv(guardar_como, encoding="latin-1", index=False)
   return filtered_dataframe[FILTER]
 
 def filtrar_cruzado(dataframe_1, column_1, dataframe_2, column_2, guardar_como=None):
@@ -391,7 +391,7 @@ def filtrar_cruzado(dataframe_1, column_1, dataframe_2, column_2, guardar_como=N
   if guardar_como is not None: dataframe_to_return.to_csv( guardar_como, encoding="latin-1", index=False )
   return dataframe_to_return
 
-def suma(dataframe, *columnas, guardar_como):
+def suma(dataframe, *columnas, guardar_como=None):
   dataframe_to_return = pd.DataFrame({f"suma total de {columna}":[dataframe[columna].sum()] for columna in columnas})
   if guardar_como is not None: dataframe_to_return.to_csv( guardar_como, encoding="latin-1", index=False )
   return dataframe_to_return

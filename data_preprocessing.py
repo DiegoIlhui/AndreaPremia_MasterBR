@@ -289,7 +289,7 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
             index=filas,
             values="aux_column",
             columns=columnas,
-            aggfunc="count",
+            aggfunc=lambda x: len(x.unique()),
             margins=margins,
             margins_name=margins_name
         )
@@ -302,13 +302,13 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
 
   if not aggfunc:
       if dataframe[valores].dtypes.name == "object":
-          aggfunc = "count"
+          aggfunc = lambda x: len(x.unique())
       elif (dataframe[valores].dtypes.name == "float64") or (dataframe[valores].dtypes.name == "int64"):
           aggfunc = "sum"
       elif isinstance(valores, list):
         aggfunc = {}
         for column in valores:
-            if dataframe[column].dtypes.name == "object": aggfunc[column] = "count"
+            if (dataframe[column].dtypes.name == "object") or (dataframe[column].dtypes.name == "datetime64[ns]"): aggfunc[column] = lambda x: len(x.unique())
             else: aggfunc[column] = "sum"
 
   pivot_table = pd.pivot_table(

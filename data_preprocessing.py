@@ -83,7 +83,7 @@ def procesar_reporte_general_de_usuarios(path):
 
   RGU["Ganadoras"] = RGU["JOYAS_TOTALES_GANADAS"].apply(lambda x: "No ganadora" if x==0 else "Ganadora")
   RGU["Con canje"] = RGU["JOYAS_CANJEADOS"].apply(lambda x: "Sin canje" if x==0 else "Con canje")
-  RGU["Con ingreso"] = [np.null] * RGU.shape[0]
+  RGU["Con ingreso"] = [np.nan] * RGU.shape[0]
   RGU.loc[pd.isnull(RGU["ULTIMO_INGRESO_APP"]), "Con ingreso"] = "Con ingreso"
   RGU.loc[pd.notnull(RGU["ULTIMO_INGRESO_APP"]), "Con ingreso"] = "Sin ingreso"
 

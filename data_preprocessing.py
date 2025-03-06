@@ -351,6 +351,8 @@ def filtrar_Y(dataframe, *condiciones, guardar_como=None):
 
     elif cond == "<>":
       FILTER &= ( filtered_dataframe[column]!=val ).values
+    elif cond == "notnull":
+      FILTER &= ( pd.notnull(filtered_dataframe[column]) ).values
     else:
       print(f'La segunda entrada de la condición {condicion} debe de ser: "=="(igual), ">>"(mayor), ">="(mayor o igual), "<<"(menor), "<="(menor o igual) o "<>"(diferente).')
 
@@ -361,7 +363,7 @@ def filtrar_O(dataframe, *condiciones, guardar_como=None):
   filtered_dataframe = dataframe
   FILTER = [False] * dataframe.shape[0]
   for condicion in condiciones:
-    assert isinstance(condicion, tuple) and len(condicion)==3, 'Las condiciones deben de estar escritas de la forma:\n(columna, condicion, valor)"'
+    assert isinstance(condicion, tuple), 'Las condiciones deben de estar escritas de la forma:\n(columna, condicion, valor) o (columna, "notnull")'
     column, cond, val = condicion
     if cond == "==":
       FILTER |= ( filtered_dataframe[column]==val ).values
@@ -380,8 +382,10 @@ def filtrar_O(dataframe, *condiciones, guardar_como=None):
 
     elif cond == "<>":
       FILTER |= ( filtered_dataframe[column]!=val ).values
+    elif cond == "notnull":
+      FILTER |= ( pd.notnull(filtered_dataframe[column]) ).values
     else:
-      print(f'La segunda entrada de la condición {condicion} debe de ser: "=="(igual), ">>"(mayor), ">="(mayor o igual), "<<"(menor), "<="(menor o igual) o "<>"(diferente).')
+      print(f'La segunda entrada de la condición {condicion} debe de ser: "=="(igual), ">>"(mayor), ">="(mayor o igual), "<<"(menor), "<="(menor o igual), "<>"(diferente) o "notnull".')
 
   if guardar_como is not None: filtered_dataframe[FILTER].to_csv(guardar_como, encoding="latin-1", index=False)
   return filtered_dataframe[FILTER]

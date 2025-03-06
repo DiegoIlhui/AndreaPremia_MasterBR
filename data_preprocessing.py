@@ -239,10 +239,10 @@ def conteo_distintivo(dataframe, column, count_name="HEAD COUNT",guardar_como=No
   print(column,end="\n\n")
   distinct_count_df = pd.DataFrame([dataframe[column].nunique()], columns=[count_name])
   if guardar_como is not None:
-    distinct_count_df.to_csv(guardar_como, encoding="latin-1",index=False)
+    distinct_count_df.to_csv(guardar_como, encoding="latin-1", index=False)
   return distinct_count_df
 
-def porcentaje_valores_dist(dataframe, column, decimals=2, plot_percentages=False, plot_type=None):
+def porcentaje_valores_dist(dataframe, column, decimals=2, plot_percentages=False, plot_type=None, guardar_como=None):
   count_df = round(dataframe[column].value_counts(1)*100, decimals)
 
   if plot_percentages:
@@ -265,16 +265,21 @@ def porcentaje_valores_dist(dataframe, column, decimals=2, plot_percentages=Fals
     else:
       print("Tipo de gráfico no reconocido o on disponible. Solo se acepta plot_type = 'bar' o 'pie'.")
 
-  return count_df.rename("Porcentaje %")
+  count_df = count_df.rename("Porcentaje %")
+  if guardar_como is not None:
+      count_df.to_csv(guardar_como, encoding="latin-1", index=False)
+  return count_df
 
 def mostrar_tabla(dataframe):
   with pd.option_context('display.max_rows', None, 'display.max_columns', None):
     print(dataframe)
 
-def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, margins_name="Total", aggfunc=None, rename_cols=None, return_=False):
+def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, margins_name="Total", aggfunc=None, rename_cols=None, return_=False, guardar_como=None):
   if valores is None:
     if columnas is None:
-      return dataframe[valores].describe()
+      frame_to_return = dataframe[valores].describe()
+      if guardar_como is not None: frame_to_return.to_csv(guardar_como, encoding="latin-1", index=False)
+      return frame_to_return
     else:
       if (dataframe[columnas].dtypes.name == "object") or (dataframe[columnas].dtypes.name == "datetime64[ns]"):
         dataframe_copy = dataframe[[valores,columnas]].copy()
@@ -288,6 +293,8 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
             margins=margins,
             margins_name=margins_name
         )
+        if guardar_como is not None:
+            pivot_table.to_csv(guardar_como, encoding="latin-1", index=False)
         return pivot_table
         
       else:
@@ -317,9 +324,11 @@ def tabla_pivote(dataframe, filas, valores=None, columnas=None, margins=True, ma
   if rename_cols:
     pivot_table = pivot_table.rename(columns=rename_cols)
 
+  if guardar_como is not None:
+      pivot_table.to_csv(guardar_como, encoding="latin-1", index=False)
   return pivot_table
 
-def filtrar_Y(dataframe, *condiciones):
+def filtrar_Y(dataframe, *condiciones, guardar_como=None):
   filtered_dataframe = dataframe
   FILTER = [True] * dataframe.shape[0]
   for condicion in condiciones:
@@ -345,6 +354,7 @@ def filtrar_Y(dataframe, *condiciones):
     else:
       print(f'La segunda entrada de la condición {condicion} debe de ser: "=="(igual), ">>"(mayor), ">="(mayor o igual), "<<"(menor), "<="(menor o igual) o "<>"(diferente).')
 
+  if guardar_como is not None: filtered_dataframe[FILTER].to_csv(guardar_como, encoding="latin-1", index=False)
   return filtered_dataframe[FILTER]
 
 def filtrar_O(dataframe, *condiciones):
@@ -373,15 +383,20 @@ def filtrar_O(dataframe, *condiciones):
     else:
       print(f'La segunda entrada de la condición {condicion} debe de ser: "=="(igual), ">>"(mayor), ">="(mayor o igual), "<<"(menor), "<="(menor o igual) o "<>"(diferente).')
 
+  filtered_dataframe[FILTER].to_csv(guardar_como, encoding="latin-1", index=False)
   return filtered_dataframe[FILTER]
 
-def filtrar_cruzado(dataframe_1, column_1, dataframe_2, column_2):
-  return dataframe_1[dataframe_1[column_1].isin( dataframe_2[column_2] )]
+def filtrar_cruzado(dataframe_1, column_1, dataframe_2, column_2, guardar_como=None):
+  dataframe_to_return = dataframe_1[dataframe_1[column_1].isin( dataframe_2[column_2] )]
+  if guardar_como is not None: dataframe_to_return.to_csv( guardar_como, encoding="latin-1", index=False )
+  return dataframe_to_return
 
-def suma(dataframe, *columnas):
-  return pd.DataFrame({f"suma total de {columna}":[dataframe[columna].sum()] for columna in columnas})
+def suma(dataframe, *columnas, guardar_como):
+  dataframe_to_return = pd.DataFrame({f"suma total de {columna}":[dataframe[columna].sum()] for columna in columnas})
+  if guardar_como is not None: dataframe_to_return.to_csv( guardar_como, encoding="latin-1", index=False )
+  return dataframe_to_return
 
-def procesar_datos(reporte_general_de_usuarios, reporte_de_metas_y_resultados, reporte_SL, filtrar_default=True):
+def procesar_datos(reporte_general_de_usuarios, reporte_de_metas_y_resultados, reporte_SL, filtrar_default=True, guardar=False):
     RGU = procesar_reporte_general_de_usuarios(reporte_general_de_usuarios)
     RMR = procesar_reporte_metas_y_resultados(reporte_de_metas_y_resultados, RGU)
     SL = procesar_shipping_list(reporte_SL)
@@ -392,5 +407,10 @@ def procesar_datos(reporte_general_de_usuarios, reporte_de_metas_y_resultados, r
         RGU = filtrar_O(RGU, ("PERFIL","==","Estrella"), ("PERFIL","==","Mayorista"))
         RMR = filtrar_O(RMR, ("PERFIL","==","Estrella"), ("PERFIL","==","Mayorista"))
         SL = filtrar_cruzado(SL, "ID_UNICO_ANDREA", RGU, "ID_UNICO_ANDREA")
+
+    if guardar:
+        RGU.to_csv("Reportegeneraldeusuarios_procesado.csv",encoding="latin-1", index=False)
+        RMR.to_csv("Reportedemetasyresultados_procesado.csv", encoding="latin-1", index=False)
+        SL.to_csv("v_sl_procesado.csv", encoding="latin-1", index=False)
 
     return RGU, RMR, SL

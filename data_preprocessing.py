@@ -437,7 +437,7 @@ def procesar_datos(reporte_general_de_usuarios, reporte_de_metas_y_resultados, r
 
     return RGU, RMR, SL
 
-def cruzar( dataframe1, dataframe2, col_tabla_izquieda, col_tabla_derecha ):
+def cruzar( dataframe1, dataframe2, col_tabla_izquierda, col_tabla_derecha ):
     return dataframe1.merge( dataframe2, left_on=col_tabla_izquierda, right_on=col_tabla_derecha )
 
 def seleccionar(dataframe, *columnas):

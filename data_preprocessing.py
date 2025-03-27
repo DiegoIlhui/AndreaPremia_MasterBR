@@ -148,7 +148,8 @@ def procesar_reporte_metas_y_resultados(path, reporte_general_de_usuarios):
 
   RMR["Crecimiento sobre la renta"] = RMR["MONTO_DE_VENTA_NETA_ACUMULADA_AL_CIERRE_DE_MES"] - RMR["CUOTA_OBJETIVO"]
 
-  return pd.merge(RMR, left_compare(RMR, "ID_UNICO_ANDREA", reporte_general_de_usuarios, "ID_UNICO_ANDREA", indicator_name="Participa"), on="ID_UNICO_ANDREA")
+  #return pd.merge(RMR, left_compare(RMR, "ID_UNICO_ANDREA", reporte_general_de_usuarios, "ID_UNICO_ANDREA", indicator_name="Participa"), on="ID_UNICO_ANDREA")
+  return RMR 
 
 # Procesamiento de datos de Shipping List
 def procesar_shipping_list(path):

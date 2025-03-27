@@ -442,3 +442,7 @@ def cruzar( dataframe1, dataframe2, col_tabla_izquierda, col_tabla_derecha ):
 
 def seleccionar(dataframe, *columnas):
     return dataframe[list(columanas)]
+
+def guardar_tabla(tabla: pd.DataFrame, nombre_tabla: str) -> None:
+    whole_name = nombre_tabla if nombre_tabla.endswith(".csv") else nombre_tabla + ".csv"
+    tabla.to_csv(nombre_tabla, encoding="utf-8", index=False)

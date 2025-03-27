@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from pathlib import Path
 
 # Valida que los datos de un dataframe sean de cierto tipo especificado
 def validate_dtypes(dtypes_series: pd.core.series.Series, dtype_dict: dict, date_columns: list = []) -> tuple[bool, str]:
@@ -443,6 +444,8 @@ def cruzar( dataframe1, dataframe2, col_tabla_izquierda, col_tabla_derecha ):
 def seleccionar(dataframe, *columnas):
     return dataframe[list(columanas)]
 
-def guardar_tabla(tabla: pd.DataFrame, nombre_tabla: str) -> None:
+def guardar_tabla(tabla: pd.DataFrame, nombre_tabla: str, guardar_en=None) -> None:
     whole_name = nombre_tabla if nombre_tabla.endswith(".csv") else nombre_tabla + ".csv"
-    tabla.to_csv(nombre_tabla, encoding="utf-8", index=False)
+    if guardar_en is not None:
+        whole_name = guardar_en + whole_name
+    tabla.to_csv(whole_name, encoding="utf-8", index=False)

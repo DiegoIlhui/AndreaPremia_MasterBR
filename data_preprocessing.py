@@ -110,7 +110,7 @@ def procesar_reporte_general_de_usuarios(path):
   return RGU
 
 # Procesamiento del reporte de metas y resultados
-def procesar_reporte_metas_y_resultados(path, reporte_general_de_usuarios):
+def procesar_reporte_metas_y_resultados(path, reporte_general_de_usuarios=None):
   objects = [
       "ID_UNICO_ANDREA",
       "NOMBRE",

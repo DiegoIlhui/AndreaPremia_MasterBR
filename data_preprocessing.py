@@ -133,11 +133,19 @@ def procesar_reporte_metas_y_resultados(path, reporte_general_de_usuarios=None):
 
   dtype_dict = {column:np.object_ for column in objects} | {column:np.float64 for column in floats}
 
-  RMR = pd.read_csv(
-      path,
-      encoding="latin-1",
-      dtype=dtype_dict
-  )
+  try:
+
+      RMR = pd.read_csv(
+          path,
+          encoding="utf-8",
+          dtype=dtype_dict
+      )
+  except UnicodeDecodeError:
+      RMR = pd.read_csv(
+          path,
+          encoding="latin-1",
+          dtype=dtype_dict
+      )
 
   dtypes_validation = validate_dtypes(RMR.dtypes, dtype_dict)
   assert dtypes_validation[0], dtypes_validation[1]

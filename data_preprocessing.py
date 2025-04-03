@@ -142,7 +142,8 @@ def procesar_reporte_metas_y_resultados(path, reporte_general_de_usuarios=None):
   dtypes_validation = validate_dtypes(RMR.dtypes, dtype_dict)
   assert dtypes_validation[0], dtypes_validation[1]
 
-  RMR["PORCENTAJE_DE_CUMPLIMIENTO"] = pd.to_numeric(RMR["PORCENTAJE_DE_CUMPLIMIENTO"].apply(lambda x: x.replace("%","")))
+  
+  RMR["PORCENTAJE_DE_CUMPLIMIENTO"] = pd.to_numeric(RMR["PORCENTAJE_DE_CUMPLIMIENTO"].apply(lambda x: x.replace("%","") if isinstance(x,str) else x))
 
   RMR["Logro meta"] = RMR["PORCENTAJE_DE_CUMPLIMIENTO"].apply(lambda x: "Cumplió" if x >= 100 else "No cumplió")
 

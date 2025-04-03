@@ -363,11 +363,14 @@ def filtrar_Y(dataframe, *condiciones, guardar_como=None):
     
         elif cond == "<>":
           FILTER &= ( filtered_dataframe[column]!=val ).values
+
         else:
             print(f"No se reconoce la condición {cond}.")
-            print(f'La segunda entrada de la condición {condicion} debe de ser: "="(igual), ">"(mayor), ">="(mayor o igual), "<"(menor), "<="(menor o igual), "<>"(diferente) o "notnull".')
-    elif len(condicion)==2 and condicion[1] == "notnull":
-      FILTER &= ( pd.notnull(filtered_dataframe[condicion[0]]) ).values
+            print(f'La segunda entrada de la condición {condicion} debe de ser: "="(igual), ">"(mayor), ">="(mayor o igual), "<"(menor), "<="(menor o igual), "<>"(diferente), "notnull" o isnull.')
+    if condicion[1] == "notnull":
+          FILTER &= ( pd.notnull(filtered_dataframe[ condicion[0] ]) ).values
+        elif condicion[1] == "isnull":
+          FILTER &= pd.isnull(filtered_dataframe[ condicion[0] ])
     else:
       print(f'La segunda entrada de la condición {condicion} debe de ser: "="(igual), ">"(mayor), ">="(mayor o igual), "<"(menor), "<="(menor o igual) o "<>"(diferente).')
 
@@ -398,11 +401,15 @@ def filtrar_O(dataframe, *condiciones, guardar_como=None):
     
         elif cond == "<>":
           FILTER |= ( filtered_dataframe[column]!=val ).values
+            
         else:
             print(f"No se reconoce la condición {cond}.")
-            print(f'La segunda entrada de la condición {condicion} debe de ser: "="(igual), ">"(mayor), ">="(mayor o igual), "<"(menor), "<="(menor o igual), "<>"(diferente) o "notnull".')
-    elif len(condicion) == 2 and condicion[1] == "notnull":
-      FILTER |= ( pd.notnull(filtered_dataframe[ condicion[0] ]) ).values
+            print(f'La segunda entrada de la condición {condicion} debe de ser: "="(igual), ">"(mayor), ">="(mayor o igual), "<"(menor), "<="(menor o igual), "<>"(diferente).')
+    elif len(condicion) == 2:
+        if condicion[1] == "notnull":
+          FILTER |= ( pd.notnull(filtered_dataframe[ condicion[0] ]) ).values
+        elif condicion[1] == "isnull":
+          FILTER |= pd.isnull(filtered_dataframe[ condicion[0] ])
     else:
       print(f'La segunda entrada de la condición {condicion} debe de ser: "="(igual), ">"(mayor), ">="(mayor o igual), "<"(menor), "<="(menor o igual), "<>"(diferente) o "notnull".')
 
@@ -443,7 +450,10 @@ def procesar_datos(reporte_general_de_usuarios, reporte_de_metas_y_resultados, r
 def cruzar( dataframe1, dataframe2, col_tabla_izquierda, col_tabla_derecha, sufijos=None, metodo_cruce="ambas" ):
     how_options =  ["ambas","izquierda","derecha","izq-der"]
     how_dict = {"ambas":"inner","izquierda":"left","derecha":"right","izq-der":"outer"}
-    assert (metodo_cruce is in how_options), "El parámetro 'metodo_cruce' debe coincidir con alguna de las siguientes opciones: 'ambas','izquierda','derecha','izq-der'."
+    if not (metodo_cruce is in how_options):
+        print(f"El parámetro 'metodo_cruce' debe coincidir con alguna de las siguientes opciones: {how_options}."
+        return None
+        
     if sufijos is not None:
         return dataframe1.merge( dataframe2, left_on=col_tabla_izquierda, right_on=col_tabla_derecha, suffixes=sufijos, how=how_dict[metodo_cruce] )
     else:

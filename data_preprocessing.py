@@ -440,11 +440,14 @@ def procesar_datos(reporte_general_de_usuarios, reporte_de_metas_y_resultados, r
 
     return RGU, RMR, SL
 
-def cruzar( dataframe1, dataframe2, col_tabla_izquierda, col_tabla_derecha, sufijos=None ):
+def cruzar( dataframe1, dataframe2, col_tabla_izquierda, col_tabla_derecha, sufijos=None, metodo_cruce="ambas" ):
+    how_options =  ["ambas","izquierda","derecha","izq-der"]
+    how_dict = {"ambas":"inner","izquierda":"left","derecha":"right","izq-der":"outer"}
+    assert metodo_cruce is in how_options, f"El parámetro 'metodo_cruce' debe coincidir con alguna de las siguientes opciones: {how_options}."
     if sufijos is not None:
-        return dataframe1.merge( dataframe2, left_on=col_tabla_izquierda, right_on=col_tabla_derecha, suffixes=sufijos )
+        return dataframe1.merge( dataframe2, left_on=col_tabla_izquierda, right_on=col_tabla_derecha, suffixes=sufijos, how=metodo_cruce )
     else:
-        return dataframe1.merge( dataframe2, left_on=col_tabla_izquierda, right_on=col_tabla_derecha )
+        return dataframe1.merge( dataframe2, left_on=col_tabla_izquierda, right_on=col_tabla_derecha, how=metodo_cruce )
         
 def seleccionar(dataframe, *columnas):
     return dataframe[list(columnas)]

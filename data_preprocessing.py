@@ -487,6 +487,7 @@ def guardar_tabla(tabla: pd.DataFrame, nombre_tabla: str, guardar_en=None) -> No
 ## Top usuarias
 
 def top_usuarias(every_csv_file):
+    start = time()
     reports: list[pd.DataFrame] = []
     columns_to_keep: list[str] = [
     "MONTO_DE_VENTA_NETA_ACUMULADA_AL_CIERRE_DE_MES",

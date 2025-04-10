@@ -480,3 +480,62 @@ def guardar_tabla(tabla: pd.DataFrame, nombre_tabla: str, guardar_en=None) -> No
     if guardar_en is not None:
         whole_name = guardar_en + whole_name
     tabla.to_csv(whole_name, encoding="utf-8", index=False)
+
+## Top usuarias
+
+def top_usuarias(every_csv_file):
+    reports: list[pd.DataFrame] = []
+    columns_to_keep: list[str] = [
+    "MONTO_DE_VENTA_NETA_ACUMULADA_AL_CIERRE_DE_MES",
+    "NIVEL",
+    "PERFIL",
+    "CUOTA_OBJETIVO",
+    "ID_UNICO_ANDREA",
+    "MES"
+    ]
+    
+    months = []
+    for file_ in every_csv_file:
+        encoding_method = "utf-8"
+        try:
+            report = pd.read_csv(file_, encoding=encoding_method)
+        except UnicodeDecodeError:
+            encoding_method = "latin-1"
+            report = pd.read_csv(file_, encoding=encoding_method)
+        month = str( int( report["MES"].unique()[0] ) )
+        months.append(month)
+        rename_columns: dict[str:str] = {"MONTO_DE_VENTA_NETA_ACUMULADA_AL_CIERRE_DE_MES":f"VENTA_NETA_MES_{month}"}
+    
+        report_copy = report.loc[report["PERFIL"]=="Estrella", columns_to_keep].rename(columns=rename_columns)
+        reports.append(report_copy)
+    
+    raw_selling_details: pd.DataFrame = pd.concat( reports ).fillna(0).drop(["PERFIL","MES"], axis=1)
+    
+    users_selling_details = raw_selling_details.groupby( "ID_UNICO_ANDREA" ).agg( {f"VENTA_NETA_MES_{i+1}":"sum" for i in range(3)}|{"CUOTA_OBJETIVO":"mean", "NIVEL":"mean"} )
+    for month in months:
+        users_selling_details.loc[:,f"SUPERO_CUOTA_OBJETIVO_MES_{month}_check"] = users_selling_details.apply( lambda x: 1 if x[f"VENTA_NETA_MES_{month}"]>= x["CUOTA_OBJETIVO"] else 0, axis=1 )
+    
+    users_selling_details.loc[:,"VENTA_TOT"] = users_selling_details[[f"VENTA_NETA_MES_{month}" for month in months]].sum(axis=1)
+    
+    users_selling_details.loc[:,"TOT_PARTICIPATION"] = users_selling_details[ [f"SUPERO_CUOTA_OBJETIVO_MES_{month}_check" for month in months] ].sum( axis=1 )
+    
+    users_selling_details.loc[:,"(Promedio) PORCENTAJE_DE_CUMPLIMIENTO"] = 100 * users_selling_details["VENTA_TOT"] / (3*users_selling_details["CUOTA_OBJETIVO"])
+    
+    wb = Workbook()
+    
+    levels = users_selling_details["NIVEL"].unique()
+    for nivel in sorted(levels):
+        ws_level = wb.create_sheet(f"TOP_NIVEL_{int(nivel)}")
+        top_users = users_selling_details[ (users_selling_details["NIVEL"]==nivel) & (users_selling_details["TOT_PARTICIPATION"]>0) & (users_selling_details["VENTA_TOT"]>0) ].sort_values(by=["TOT_PARTICIPATION","(Promedio) PORCENTAJE_DE_CUMPLIMIENTO"], ascending=False).reset_index().head(10)
+        for row_idx, row in enumerate( dataframe_to_rows( top_users, header=True, index=False ) ):
+            for column_idx, value in enumerate(row):
+                ws_level.cell(row = row_idx + 1, column=column_idx + 1, value=value)     
+
+    wb.remove(wb['Sheet'])
+    wb.save(f"Top_users_months_{"_".join(months)}.xlsx")
+    
+    end = time()
+    duration = end-start
+    print(F"\nElapsed Time {duration//60} min {duration%60:0.2f} sec")
+
+    return None

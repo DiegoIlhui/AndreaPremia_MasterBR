@@ -465,7 +465,10 @@ def cruzar( dataframe1, dataframe2, col_tabla_izquierda, col_tabla_derecha, sufi
         return dataframe1.merge( dataframe2, left_on=col_tabla_izquierda, right_on=col_tabla_derecha, suffixes=sufijos, how=how_dict[metodo_cruce] )
     else:
         return dataframe1.merge( dataframe2, left_on=col_tabla_izquierda, right_on=col_tabla_derecha, how=how_dict[metodo_cruce] )
-        
+
+def seleccionar_list(dataframe, lista_columnas):
+    return dataframe[lista_columnas]
+
 def seleccionar(dataframe, *columnas):
     return dataframe[list(columnas)]
 

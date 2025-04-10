@@ -374,14 +374,14 @@ def filtrar_Y(dataframe, *condiciones, guardar_como=None):
 
         else:
             print(f"No se reconoce la condición {cond}.")
-            print(f'La segunda entrada de la condición {condicion} debe de ser: "="(igual), ">"(mayor), ">="(mayor o igual), "<"(menor), "<="(menor o igual), "<>"(diferente), "notnull" o isnull.')
-    if len(condicion)==2:
+            print(f'La segunda entrada de la condición {condicion} debe de ser: "="(igual), ">"(mayor), ">="(mayor o igual), "<"(menor), "<="(menor o igual) o "<>"(diferente)')
+    elif len(condicion)==2:
         if condicion[1] == "notnull":
           FILTER &= ( pd.notnull(filtered_dataframe[ condicion[0] ]) ).values
         elif condicion[1] == "isnull":
           FILTER &= pd.isnull(filtered_dataframe[ condicion[0] ])
-    else:
-      print(f'La segunda entrada de la condición {condicion} debe de ser: "="(igual), ">"(mayor), ">="(mayor o igual), "<"(menor), "<="(menor o igual) o "<>"(diferente).')
+        else:
+          print(f'La segunda entrada de la condición {condicion} debe de ser: "notnull" o isnull.')
 
   if guardar_como is not None: filtered_dataframe[FILTER].to_csv(guardar_como, encoding="latin-1", index=False)
   return filtered_dataframe[FILTER]
@@ -419,8 +419,8 @@ def filtrar_O(dataframe, *condiciones, guardar_como=None):
           FILTER |= ( pd.notnull(filtered_dataframe[ condicion[0] ]) ).values
         elif condicion[1] == "isnull":
           FILTER |= pd.isnull(filtered_dataframe[ condicion[0] ])
-    else:
-      print(f'La segunda entrada de la condición {condicion} debe de ser: "="(igual), ">"(mayor), ">="(mayor o igual), "<"(menor), "<="(menor o igual), "<>"(diferente) o "notnull".')
+        else:
+          print(f'La segunda entrada de la condición {condicion} debe de ser: "notnull" o isnull.')
 
   if guardar_como is not None: filtered_dataframe[FILTER].to_csv(guardar_como, encoding="latin-1", index=False)
   return filtered_dataframe[FILTER]

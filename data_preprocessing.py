@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
+from time import time
 
 # Valida que los datos de un dataframe sean de cierto tipo especificado
 def validate_dtypes(dtypes_series: pd.core.series.Series, dtype_dict: dict, date_columns: list = []) -> tuple[bool, str]:

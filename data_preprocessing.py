@@ -472,6 +472,9 @@ def seleccionar_list(dataframe, lista_columnas):
 def seleccionar(dataframe, *columnas):
     return dataframe[list(columnas)]
 
+def concatenar( *dataframes_list ):
+    return pd.concat( list(dataframes_list) )
+
 def guardar_tabla(tabla: pd.DataFrame, nombre_tabla: str, guardar_en=None) -> None:
     whole_name = nombre_tabla if nombre_tabla.endswith(".csv") else nombre_tabla + ".csv"
     if guardar_en is not None:

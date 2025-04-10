@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
+from openpyxl import Workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
 
 # Valida que los datos de un dataframe sean de cierto tipo especificado
 def validate_dtypes(dtypes_series: pd.core.series.Series, dtype_dict: dict, date_columns: list = []) -> tuple[bool, str]:
@@ -532,7 +534,7 @@ def top_usuarias(every_csv_file):
                 ws_level.cell(row = row_idx + 1, column=column_idx + 1, value=value)     
 
     wb.remove(wb['Sheet'])
-    wb.save(f"Top_users_months_{"_".join(months)}.xlsx")
+    wb.save(f'Top_users_months_{"_".join(months)}.xlsx')
     
     end = time()
     duration = end-start
